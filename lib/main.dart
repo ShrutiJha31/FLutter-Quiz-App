@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'quizBrain.dart';
 
 void main() => runApp(Quizzler());
 
@@ -25,8 +26,12 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Icon> scorekeeper=[];
+  QuizBrain quizBrain=QuizBrain();
+
   @override
   Widget build(BuildContext context) {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,7 +42,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.questionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -50,41 +55,83 @@ class _QuizPageState extends State<QuizPage> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.green,
-              child: Text(
-                'True',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
+            child: TextButton(
+                child: Text(
+                  'False',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
                 ),
-              ),
-              onPressed: () {
-                //The user picked true.
-              },
-            ),
+                onPressed: () {
+                  setState(() {
+
+                    if(quizBrain.questionAns()==true) {
+                      scorekeeper.add(
+                          Icon(
+                            Icons.highlight_off,
+                            color: Colors.red,
+                          )
+                      );
+                    }
+                    else
+                      {
+                        scorekeeper.add(
+                            Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            )
+                        );
+                      }
+                    quizBrain.nextQues();
+                  });
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.red))),
           ),
         ),
+
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
+            child: TextButton(
+                child: Text(
+                  'True',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
                 ),
-              ),
-              onPressed: () {
-                //The user picked false.
-              },
-            ),
+                onPressed: () {
+                  setState(() {
+
+                    if(quizBrain.questionAns()==false) {
+                      scorekeeper.add(
+                          Icon(
+                            Icons.highlight_off,
+                            color: Colors.red,
+                          )
+                      );
+                    }
+                    else
+                    {
+                      scorekeeper.add(
+                          Icon(
+                            Icons.check,
+                            color: Colors.green,
+                          )
+                      );
+                    }
+                    quizBrain.nextQues();
+                  });
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.green))),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+          children: scorekeeper,
+        )
       ],
     );
   }
